@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -15,6 +16,7 @@ import com.example.autenticacion.Modelo.Evento.ModeloRespuestaEvento;
 import com.example.autenticacion.Modelo.Login.ModeloRespuestaLogin;
 import com.example.autenticacion.Modelo.Login.ModeloUsuarioLogin;
 import com.example.autenticacion.Modelo.ModeloUsuario;
+import com.example.autenticacion.Modelo.Token.ModeloTokens;
 import com.example.autenticacion.Vista.VistaInicio;
 import com.example.autenticacion.Vista.VistaLogin;
 import com.example.autenticacion.Vista.VistaRegistro;
@@ -61,7 +63,12 @@ public class PresentadorLogin {
 
                         registrarLogin(response.body().getToken());
 
+                        ModeloTokens tokens = new ModeloTokens(response.body().getToken(),response.body().getToken_refresh());
                         Intent intent = new Intent(contexto, VistaInicio.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("tokens", tokens);
+                        intent.putExtras(bundle);
+
                         contexto.startActivity(intent);
                     }else{
                         Toast.makeText(contexto, "No se pudo iniciar sesión - los datos son incorrectos", Toast.LENGTH_SHORT).show();

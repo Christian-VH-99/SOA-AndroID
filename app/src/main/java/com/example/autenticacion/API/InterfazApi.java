@@ -27,8 +27,8 @@ public interface InterfazApi {
     @POST("login")
     Call<ModeloRespuestaLogin> login(@Body ModeloUsuarioLogin usuario);
 
-    //@POST("refresh")
-    //Call<ModeloRespuestaToken> refresh(@Body ModeloUsuario usuario);
+    @POST("refresh")
+    Call<ModeloRespuestaToken> refresh(@Header("Authorization") String token_Refresh);
 
     @POST("event")
     Call<ModeloRespuestaEvento> registrarEvento(@Header("Authorization") String token, @Body ModeloEvento event);

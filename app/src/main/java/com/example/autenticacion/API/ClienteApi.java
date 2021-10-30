@@ -6,6 +6,7 @@ import com.example.autenticacion.Modelo.Login.ModeloRespuestaLogin;
 import com.example.autenticacion.Modelo.Login.ModeloUsuarioLogin;
 import com.example.autenticacion.Modelo.ModeloUsuario;
 import com.example.autenticacion.Modelo.Registro.ModeloRespuestaRegistrar;
+import com.example.autenticacion.Modelo.Token.ModeloRespuestaToken;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,14 +42,20 @@ public class ClienteApi {
 
     public void Login(ModeloUsuarioLogin usuario, Callback<ModeloRespuestaLogin> callback)
     {
-        Call<ModeloRespuestaLogin> userCall = servicio.login(usuario);
-        userCall.enqueue(callback);
+        Call<ModeloRespuestaLogin> usuarioCall = servicio.login(usuario);
+        usuarioCall.enqueue(callback);
     }
 
     public void RegistrarEvento(String token, ModeloEvento event, Callback<ModeloRespuestaEvento> callback)
     {
-        Call<ModeloRespuestaEvento> userCall = servicio.registrarEvento("Bearer "+token, event);
-        userCall.enqueue(callback);
+        Call<ModeloRespuestaEvento> usuarioCall = servicio.registrarEvento("Bearer "+token, event);
+        usuarioCall.enqueue(callback);
+    }
+
+    public void Refresh(String token_refresh, Callback<ModeloRespuestaToken> callback)
+    {
+        Call<ModeloRespuestaToken> usuarioCall = servicio.refresh("Bearer "+token_refresh);
+        usuarioCall.enqueue(callback);
     }
 
 }

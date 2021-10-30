@@ -1,5 +1,7 @@
 package com.example.autenticacion.Modelo.Login;
 
+import java.io.Serializable;
+
 public class ModeloRespuestaLogin {
 
     private String token, token_refresh;

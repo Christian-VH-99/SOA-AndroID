@@ -3,23 +3,44 @@ package com.example.autenticacion.Presentador;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.aware.PublishConfig;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.example.autenticacion.API.ClienteApi;
+import com.example.autenticacion.Modelo.Token.ModeloRespuestaToken;
+import com.example.autenticacion.Modelo.Token.ModeloTokens;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PresentadorInicio {
 
     private Context contexto;
-    Timer timer = new Timer();
-    final Handler handler = new Handler();
+    private ModeloTokens tokens;
+    private Handler handler = new Handler();
+    private final int TIEMPO = 20000;
+    private ClienteApi clienteApi;
 
-    public PresentadorInicio(Context contexto) {
+    public PresentadorInicio(Context contexto, Bundle tokensEnviados)
+    {
         this.contexto = contexto;
+        if(tokensEnviados!=null){
+            this.tokens = (ModeloTokens) tokensEnviados.getSerializable("tokens");
+        }
+        clienteApi = ClienteApi.getInstance();
+        actualizarToken();
+
     }
 
     public void mostrarNivelBateria(){
@@ -35,25 +56,52 @@ public class PresentadorInicio {
 
     }
 
-    public void actualizarToken (){
-        TimerTask tarea = new TimerTask() {
+    public void actualizarToken () {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                AsyncTask obtenerToken = new AsyncTask() {
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
-                        return null;
-                    }
-                };
-                obtenerToken.execute();
+                handler.postDelayed(this,TIEMPO);
+                obtenerNuevoToken();
             }
-        };
-        timer.schedule(tarea,0,84000);
+        },TIEMPO);
+    }
+
+    public void obtenerNuevoToken()
+    {
+        /*
+        if(!confirmarConexion()){
+            Toast.makeText(contexto, "Error en la conexion", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        clienteApi.Refresh(tokens.getToken_Refresh(), new Callback<ModeloRespuestaToken>() {
+            @Override
+            public void onResponse(Call<ModeloRespuestaToken> call, Response<ModeloRespuestaToken> response) {
+                if(response.isSuccessful()){
+                    tokens.setToken(response.body().getToken());
+                    tokens.setToken_Refresh(response.body().getToken_refresh());
+                    Toast.makeText(contexto, tokens.getToken(), Toast.LENGTH_SHORT).show();
+
+                }else
+                    Toast.makeText(contexto, "No se pudo actualizar el token", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<ModeloRespuestaToken> call, Throwable t) {
+                Toast.makeText(contexto, "Error al actualizar token", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+        Toast.makeText(contexto, "tamos", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean confirmarConexion() {
+        ConnectivityManager cm =
+                (ConnectivityManager)contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
     }
 }
