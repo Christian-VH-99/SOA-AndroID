@@ -88,7 +88,7 @@ public class ModeloUsuario {
     }
 
     public String datosCorrectos (/*String mensaje*/){
-        if(this.name.isEmpty() || this.lastname.isEmpty() || this.dni.equals("") || this.group.equals("")){
+        if(this.name.isEmpty() || this.lastname.isEmpty() || this.dni==0 || this.group==0){
             return "Complete los campos solicitados";
             //return;
         }

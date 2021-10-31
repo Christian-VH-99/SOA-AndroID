@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_baseline_fingerprint_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_baseline_school_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/ic_sharp_person_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/style_button_login.xml" value="0.2203125" />
+        <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/drawable/style_input.xml" value="0.2203125" />
         <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/layout/activity_vista_login.xml" value="0.23867753623188406" />
         <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/layout/activity_vista_patron.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/ChristianVanHoutte/AndroidStudioProjects/Autenticacion/app/src/main/res/layout/activity_vista_registro.xml" value="0.25" />

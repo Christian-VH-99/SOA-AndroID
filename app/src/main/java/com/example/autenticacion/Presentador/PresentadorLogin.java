@@ -1,11 +1,14 @@
 package com.example.autenticacion.Presentador;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -44,9 +47,15 @@ public class PresentadorLogin {
             Toast.makeText(contexto, "Error en la conexion", Toast.LENGTH_SHORT).show();
             return;
         }
+        final ProgressDialog dialog = new ProgressDialog(contexto);
+        dialog.setMessage("Iniciando sesión");
+        dialog.setCancelable(false);
+        dialog.show();
 
         clienteApi = ClienteApi.getInstance();
         String mensaje = usuario.datosLoginCorrectos();
+
+
 
         //Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
 
@@ -63,6 +72,8 @@ public class PresentadorLogin {
 
                         registrarLogin(response.body().getToken());
 
+                        dialog.dismiss();
+
                         ModeloTokens tokens = new ModeloTokens(response.body().getToken(),response.body().getToken_refresh());
                         Intent intent = new Intent(contexto, VistaInicio.class);
                         Bundle bundle = new Bundle();
@@ -71,17 +82,20 @@ public class PresentadorLogin {
 
                         contexto.startActivity(intent);
                     }else{
+                        dialog.dismiss();
                         Toast.makeText(contexto, "No se pudo iniciar sesión - los datos son incorrectos", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ModeloRespuestaLogin> call, Throwable t) {
+                    dialog.dismiss();
                     Toast.makeText(contexto, "El usuario no existe", Toast.LENGTH_SHORT).show();
                 }
             });
 
         }else{
+            dialog.dismiss();
             Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
             return;
         }

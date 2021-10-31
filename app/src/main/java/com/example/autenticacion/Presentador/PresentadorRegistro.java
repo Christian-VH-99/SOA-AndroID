@@ -1,5 +1,6 @@
 package com.example.autenticacion.Presentador;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -31,6 +32,11 @@ public class PresentadorRegistro {
             return;
         }
 
+        final ProgressDialog dialog = new ProgressDialog(contexto);
+        dialog.setMessage("Registrando usuario");
+        dialog.setCancelable(false);
+        dialog.show();
+
         clienteApi = ClienteApi.getInstance();
         String mensaje = usuario.datosCorrectos();
 
@@ -44,21 +50,26 @@ public class PresentadorRegistro {
                 public void onResponse(Call<ModeloRespuestaRegistrar> call, Response<ModeloRespuestaRegistrar> response) {
 
                     if(response.isSuccessful()){
-                       Toast.makeText(contexto, "Usuario registrado - " + response.body().getToken(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        Toast.makeText(contexto, "Usuario registrado - " + response.body().getToken(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(contexto, VistaInicio.class);
                         contexto.startActivity(intent);
-                    }else
+                    }else{
+                        dialog.dismiss();
                         Toast.makeText(contexto, "No se pudo registrar al usuario", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<ModeloRespuestaRegistrar> call, Throwable t) {
-                    Toast.makeText(contexto, "No se pudo registrar al usuario", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    Toast.makeText(contexto, "Fallo - No se pudo registrar al usuario", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else
+        }else{
+            dialog.dismiss();
             Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
-        
+        }
     }
 
     private boolean confirmarConexion() {
