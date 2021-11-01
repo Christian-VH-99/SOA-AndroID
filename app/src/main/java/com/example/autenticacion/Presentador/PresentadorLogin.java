@@ -67,6 +67,7 @@ public class PresentadorLogin {
                         Intent intent = new Intent(contexto, VistaInicio.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("tokens", tokens);
+                        bundle.putSerializable("email", usuario.getEmail());
                         intent.putExtras(bundle);
 
                         contexto.startActivity(intent);

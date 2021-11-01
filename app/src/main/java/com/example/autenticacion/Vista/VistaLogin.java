@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.autenticacion.Modelo.Login.ModeloUsuarioLogin;
-import com.example.autenticacion.Modelo.ModeloUsuario;
 import com.example.autenticacion.Presentador.PresentadorLogin;
 import com.example.autenticacion.R;
 

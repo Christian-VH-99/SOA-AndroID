@@ -2,9 +2,8 @@ package com.example.autenticacion.Modelo;
 
 public class ModeloUsuario {
 
-    private String env, name, lastname, email,password;
+    private String env, name, lastname, email,password, nroDeCiudadano;
     private Integer dni, commission, group;
-
 
     public ModeloUsuario(String env, String name, String lastname, String email, String password, Integer dni, Integer commission, Integer group) {
         this.env = env;
@@ -15,12 +14,26 @@ public class ModeloUsuario {
         this.dni = dni;
         this.commission = commission;
         this.group = group;
+
+        this.nroDeCiudadano = ""; //se carga cuando se registra la vacuna
     }
 
     public ModeloUsuario(String email, String password){
         this.env = "TEST";
         this.email = email;
         this.password = password;
+    }
+
+    public ModeloUsuario() {
+        this.env = "";
+        this.name = "";
+        this.lastname = "";
+        this.email = "";
+        this.password = "";
+        this.dni = 0;
+        this.commission = 0;
+        this.group = 0;
+        this.nroDeCiudadano = "";
     }
 
     public String getEnv() {

@@ -36,27 +36,40 @@ public class VistaRegistro extends AppCompatActivity implements View.OnClickList
 
         Button btnRegistrar = findViewById(R.id.btnRegistrar);
         btnRegistrar.setOnClickListener(this);
-
-
-
+        
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.btnRegistrar){
 
-
-
             String name = etNombre.getText().toString().trim();
             String lastname = etApellido.getText().toString().trim();
             String dni = etDni.getText().toString().trim();
+            int dni_int = 0;
+
+            if( !dni.isEmpty() ) {
+                dni_int = Integer.parseInt(dni);
+            }
+
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String commission = etComision.getText().toString().trim();
+            int commission_int = 0;
+
+            if ( !commission.isEmpty() ) {
+                commission_int = Integer.parseInt(commission);
+            }
+
             String group = etGrupo.getText().toString().trim();
+            int grupo_int = 0;
+
+            if ( ! group.isEmpty() ) {
+                grupo_int = Integer.parseInt(group);
+            }
 
             modeloUsuario = new ModeloUsuario("PROD",name, lastname, email,
-                    password, Integer.parseInt(dni), Integer.parseInt(commission), Integer.parseInt(group));
+                    password, dni_int, commission_int, grupo_int);
 
 
             presentadorRegistro.registrarUsuario(modeloUsuario);

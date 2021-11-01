@@ -8,6 +8,7 @@ import android.view.Display;
 import android.widget.Toast;
 
 import com.example.autenticacion.API.ClienteApi;
+import com.example.autenticacion.BaseDeDatos.AdminSQLiteOpenHelper;
 import com.example.autenticacion.Modelo.ModeloUsuario;
 import com.example.autenticacion.Modelo.Registro.ModeloRespuestaRegistrar;
 import com.example.autenticacion.Vista.VistaInicio;
@@ -47,14 +48,20 @@ public class PresentadorRegistro {
                        Toast.makeText(contexto, "Usuario registrado - " + response.body().getToken(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(contexto, VistaInicio.class);
                         contexto.startActivity(intent);
+
                     }else
                         Toast.makeText(contexto, "No se pudo registrar al usuario", Toast.LENGTH_SHORT).show();
+
+                    //Aprovecho el proceso en Background para registrar el usuario en la base de datos local
+                    AdminSQLiteOpenHelper BaseDeDatos = AdminSQLiteOpenHelper.getInstance(contexto);
+                    BaseDeDatos.insertarUsuario(usuario);
                 }
 
                 @Override
                 public void onFailure(Call<ModeloRespuestaRegistrar> call, Throwable t) {
                     Toast.makeText(contexto, "No se pudo registrar al usuario", Toast.LENGTH_SHORT).show();
                 }
+
             });
         }else
             Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();

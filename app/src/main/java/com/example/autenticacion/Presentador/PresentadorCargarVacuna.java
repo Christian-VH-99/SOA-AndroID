@@ -2,33 +2,19 @@ package com.example.autenticacion.Presentador;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.aware.PublishConfig;
-import android.os.AsyncTask;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.widget.Toast;
 
 import com.example.autenticacion.API.ClienteApi;
-import com.example.autenticacion.Modelo.Token.ModeloRespuestaToken;
+import com.example.autenticacion.BaseDeDatos.AdminSQLiteOpenHelper;
+import com.example.autenticacion.Modelo.ModeloVacuna;
 import com.example.autenticacion.Modelo.Token.ModeloTokens;
-import com.example.autenticacion.Vista.VistaCargarVacuna;
-import com.example.autenticacion.Vista.VistaConsultarVacunas;
 import com.example.autenticacion.Vista.VistaInicio;
 
-import java.io.Serializable;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class PresentadorInicio {
+public class PresentadorCargarVacuna {
 
     private String email;
     private Context contexto;
@@ -37,43 +23,27 @@ public class PresentadorInicio {
     private final int TIEMPO = 20000;
     private ClienteApi clienteApi;
 
-    public PresentadorInicio(Context contexto, Bundle datosDeSesion)
-    {
+    public PresentadorCargarVacuna(Context contexto, Bundle datosDeSesion) {
         this.contexto = contexto;
-        if(datosDeSesion!=null){
+        if (datosDeSesion != null) {
             this.tokens = (ModeloTokens) datosDeSesion.getSerializable("tokens");
             this.email = (String) datosDeSesion.getSerializable("email");
         }
         clienteApi = ClienteApi.getInstance();
         actualizarToken();
-
     }
 
-    public void mostrarNivelBateria(){
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent estadoBateria = contexto.registerReceiver(null, ifilter);
-
-        int nivel = estadoBateria.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int escala = estadoBateria.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
-        float bateria = nivel * 100 / (float)escala;
-
-        Toast.makeText(contexto, "Bateria al " + bateria + "%", Toast.LENGTH_SHORT).show();
-
-    }
-
-    public void actualizarToken () {
+    private void actualizarToken() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                handler.postDelayed(this,TIEMPO);
+                handler.postDelayed(this, TIEMPO);
                 obtenerNuevoToken();
             }
-        },TIEMPO);
+        }, TIEMPO);
     }
 
-    public void obtenerNuevoToken()
-    {
+    public void obtenerNuevoToken() {
         /*
         if(!confirmarConexion()){
             Toast.makeText(contexto, "Error en la conexion", Toast.LENGTH_SHORT).show();
@@ -103,7 +73,7 @@ public class PresentadorInicio {
 
     private boolean confirmarConexion() {
         ConnectivityManager cm =
-                (ConnectivityManager)contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
@@ -111,21 +81,19 @@ public class PresentadorInicio {
 
     }
 
-    public void cargarVacuna(){
-        Intent intent = new Intent(contexto, VistaCargarVacuna.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("tokens", tokens);
-        bundle.putSerializable("email", email);
-        intent.putExtras(bundle);
-        contexto.startActivity(intent);
-    }
+    public void cargarVacuna(ModeloVacuna vacuna) {
 
-    public void consultarVacunas(){
-        Intent intent = new Intent(contexto, VistaConsultarVacunas.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("tokens", tokens);
-        bundle.putSerializable("email", email);
-        intent.putExtras(bundle);
+        AdminSQLiteOpenHelper BaseDeDatos = AdminSQLiteOpenHelper.getInstance(contexto);
+
+        vacuna.setMail(this.email);
+
+        String mensaje = vacuna.datosCorrectos();
+
+        if(mensaje.equals("Datos Correctos")){
+            BaseDeDatos.insertarVacuna(vacuna);
+        }
+
+        Intent intent = new Intent(contexto, VistaInicio.class);
         contexto.startActivity(intent);
     }
 }
