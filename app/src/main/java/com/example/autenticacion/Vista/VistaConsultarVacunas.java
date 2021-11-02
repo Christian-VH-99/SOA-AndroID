@@ -5,27 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.autenticacion.Modelo.ListAdapter;
 import com.example.autenticacion.Modelo.ModeloVacuna;
 import com.example.autenticacion.Presentador.PresentadorConsultarVacunas;
 import com.example.autenticacion.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VistaConsultarVacunas extends AppCompatActivity implements View.OnClickListener {
 
     private PresentadorConsultarVacunas prestdrConsultarVacunas;
-    private TextView txtIDVacuna_Fila_1;
-    private TextView txtTipo_Fila_1;
-    private TextView txtFecha_Fila_1;
-    private TextView txtFirma_Fila_1;
-
-    private TextView txtIDVacuna_Fila_2;
-    private TextView txtTipo_Fila_2;
-    private TextView txtFecha_Fila_2;
-    private TextView txtFirma_Fila_2;
+    private ListView listView;
+    ListAdapter adaptador;
+    private List<ModeloVacuna> vacunas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,42 +32,28 @@ public class VistaConsultarVacunas extends AppCompatActivity implements View.OnC
         Bundle datosDeSesion =getIntent().getExtras();
 
         prestdrConsultarVacunas = new PresentadorConsultarVacunas(this, datosDeSesion);
+        prestdrConsultarVacunas.consultarVacunas();
 
-        List<ModeloVacuna> vacunas = prestdrConsultarVacunas.consultarVacunas();
+        vacunas = prestdrConsultarVacunas.getVacunas();
 
-        txtIDVacuna_Fila_1 = findViewById(R.id.txtIDVacuna_Fila_1);
-        txtTipo_Fila_1 = findViewById(R.id.txtTipo_Fila_1);
-        txtFecha_Fila_1 = findViewById(R.id.txtFecha_Fila_1);
-        txtFirma_Fila_1 = findViewById(R.id.txtFirma_Fila_1);
+        listView = findViewById(R.id.list_vacunas);
 
-        if( ! vacunas.isEmpty() ){
-            txtIDVacuna_Fila_1.setText(vacunas.get(0).getId_vacuna());
-            txtTipo_Fila_1.setText(vacunas.get(0).getTipo_de_vacuna());
-            txtFecha_Fila_1.setText(vacunas.get(0).getFecha_de_vacuna());
-            txtFirma_Fila_1.setText(vacunas.get(0).getFirma());
-
-            txtIDVacuna_Fila_2 = findViewById(R.id.txtIDVacuna_Fila_2);
-            txtTipo_Fila_2 = findViewById(R.id.txtTipo_Fila_2);
-            txtFecha_Fila_2 = findViewById(R.id.txtFecha_Fila_2);
-            txtFirma_Fila_2 = findViewById(R.id.txtFirma_Fila_2);
-
-            txtIDVacuna_Fila_2.setText(vacunas.get(1).getId_vacuna());
-            txtTipo_Fila_2.setText(vacunas.get(1).getTipo_de_vacuna());
-            txtFecha_Fila_2.setText(vacunas.get(1).getFecha_de_vacuna());
-            txtFirma_Fila_2.setText(vacunas.get(1).getFirma());
-        }
-        else{
+        if(!vacunas.isEmpty()){
+            adaptador = new ListAdapter(this,R.layout.item_row,vacunas);
+            listView.setAdapter(adaptador);
+        }else
             Toast.makeText(this, "No hay vacunas registradas", Toast.LENGTH_SHORT).show();
-        }
 
-        Button btnVolver = findViewById(R.id.btnVolver);
+
+        Button btnVolver = findViewById(R.id.btnVolverVacunas);
         btnVolver.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
 
-        if(v.getId()== R.id.btnVolver){
+        if(v.getId()== R.id.btnVolverVacunas){
 
             prestdrConsultarVacunas.volver();
 

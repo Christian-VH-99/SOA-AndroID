@@ -57,7 +57,7 @@ public class PresentadorLogin {
 
                     if(response.isSuccessful()){
 
-                        Toast.makeText(contexto, "Sesión Iniciada " + response.body().getToken(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(contexto, "Sesión Iniciada " + response.body().getToken(), Toast.LENGTH_SHORT).show();
 
                         registrarLogin(response.body().getToken());
 
@@ -107,7 +107,7 @@ public class PresentadorLogin {
 
     public  void registrarLogin(String token){
 
-        ModeloEvento evento = new ModeloEvento("TEST","Login", "Se inicio sesión");
+        ModeloEvento evento = new ModeloEvento("PROD","Login", "Se inicio sesión");
         clienteApi.RegistrarEvento(token, evento, new Callback<ModeloRespuestaEvento>() {
             @Override
             public void onResponse(Call<ModeloRespuestaEvento> call, Response<ModeloRespuestaEvento> response) {

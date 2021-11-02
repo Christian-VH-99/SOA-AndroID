@@ -34,6 +34,9 @@ public class VistaCargarVacuna extends AppCompatActivity implements View.OnClick
         Button btnRegistrar = findViewById(R.id.btnRegistrarVacuna);
         btnRegistrar.setOnClickListener(this);
 
+        Button btnCancelar = findViewById(R.id.btnCancelarVacuna);
+        btnCancelar.setOnClickListener(this);
+
         prestdrCargarVacuna = new PresentadorCargarVacuna(this, datosDeSesion);
     }
 
@@ -63,6 +66,7 @@ public class VistaCargarVacuna extends AppCompatActivity implements View.OnClick
 
             prestdrCargarVacuna.cargarVacuna(vacuna);
 
-        }
+        }else if(v.getId()==R.id.btnCancelarVacuna)
+            prestdrCargarVacuna.cancelar();
     }
 }

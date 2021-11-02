@@ -12,10 +12,14 @@ import com.example.autenticacion.API.ClienteApi;
 import com.example.autenticacion.BaseDeDatos.AdminSQLiteOpenHelper;
 import com.example.autenticacion.Modelo.ModeloVacuna;
 import com.example.autenticacion.Modelo.Token.ModeloDatosSesion;
-import com.example.autenticacion.TareaBackground;
+import com.example.autenticacion.Modelo.Token.ModeloRespuestaToken;
 import com.example.autenticacion.Vista.VistaInicio;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PresentadorConsultarVacunas {
 
@@ -23,8 +27,10 @@ public class PresentadorConsultarVacunas {
     private Context contexto;
     private ModeloDatosSesion datosSesion;
     private Handler handler = new Handler();
-    private final int TIEMPO = 20000;
+    private final int TIEMPO = 870000;
     private ClienteApi clienteApi;
+
+    private List<ModeloVacuna> vacunas;
 
     public PresentadorConsultarVacunas(Context contexto, Bundle datosDeSesion) {
         this.contexto = contexto;
@@ -34,6 +40,9 @@ public class PresentadorConsultarVacunas {
         }
         clienteApi = ClienteApi.getInstance();
         actualizarToken();
+
+
+
     }
 
     private void actualizarToken() {
@@ -47,19 +56,19 @@ public class PresentadorConsultarVacunas {
     }
 
     public void obtenerNuevoToken() {
-        /*
+
         if(!confirmarConexion()){
             Toast.makeText(contexto, "Error en la conexion", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        clienteApi.Refresh(tokens.getToken_Refresh(), new Callback<ModeloRespuestaToken>() {
+        clienteApi.Refresh(datosSesion.getToken_Refresh(), new Callback<ModeloRespuestaToken>() {
             @Override
             public void onResponse(Call<ModeloRespuestaToken> call, Response<ModeloRespuestaToken> response) {
                 if(response.isSuccessful()){
-                    tokens.setToken(response.body().getToken());
-                    tokens.setToken_Refresh(response.body().getToken_refresh());
-                    Toast.makeText(contexto, tokens.getToken(), Toast.LENGTH_SHORT).show();
+                    datosSesion.setToken(response.body().getToken());
+                    datosSesion.setToken_Refresh(response.body().getToken_refresh());
+                    //Toast.makeText(contexto, tdatosSesionokens.getToken(), Toast.LENGTH_SHORT).show();
 
                 }else
                     Toast.makeText(contexto, "No se pudo actualizar el token", Toast.LENGTH_SHORT).show();
@@ -70,8 +79,8 @@ public class PresentadorConsultarVacunas {
             public void onFailure(Call<ModeloRespuestaToken> call, Throwable t) {
                 Toast.makeText(contexto, "Error al actualizar token", Toast.LENGTH_SHORT).show();
             }
-        });*/
-        Toast.makeText(contexto, "tamos", Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     private boolean confirmarConexion() {
@@ -84,16 +93,22 @@ public class PresentadorConsultarVacunas {
 
     }
 
-    public List<ModeloVacuna> consultarVacunas() {
-
-        TareaBackground hilo=new TareaBackground(contexto,datosSesion);
-
-        return hilo.getVacunas();
+    public void consultarVacunas() {
+        AdminSQLiteOpenHelper BaseDeDatos = new AdminSQLiteOpenHelper(contexto);
+        this.vacunas = BaseDeDatos.consultarVacunas(this.datosSesion.getEmail());
     }
 
     public void volver() {
 
         Intent intent = new Intent(contexto, VistaInicio.class);
         contexto.startActivity(intent);
+    }
+
+    public List<ModeloVacuna> getVacunas() {
+        return vacunas;
+    }
+
+    public void setVacunas(List<ModeloVacuna> vacunas) {
+        this.vacunas = vacunas;
     }
 }

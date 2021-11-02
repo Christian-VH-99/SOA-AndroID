@@ -48,8 +48,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String FIRMA = "firma";
     private static final String FK_KEY_MAIL = "mail";
 
-
-    private AdminSQLiteOpenHelper(Context context) {
+    public AdminSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -176,24 +175,49 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         // LEFT OUTER JOIN Usuarios
         // ON Vacunas.FK_KEY_MAIL = Usuarios.PRIMARY_KEY_MAIL
         String POSTS_SELECT_QUERY =
-                String.format("SELECT * FROM %s LEFT OUTER JOIN %s ON %s.%s = %s.%s",
-                        TABLA_VACUNAS,
-                        TABLA_USUARIOS,
-                        TABLA_VACUNAS, FK_KEY_MAIL,
-                        TABLA_USUARIOS, PRIMARY_KEY_MAIL);
+                String.format("SELECT * FROM %s WHERE %s = '%s'", TABLA_VACUNAS, FK_KEY_MAIL, email);
 
         // obtenemos acceso a la bae en modo lectura
-        SQLiteDatabase BaseDeDatos = getReadableDatabase();
-        Cursor cursor = BaseDeDatos.rawQuery(POSTS_SELECT_QUERY, null);
+        SQLiteDatabase baseDeDatos = getReadableDatabase();
+        Cursor cursor = baseDeDatos.rawQuery(POSTS_SELECT_QUERY, null);
+
+        String respuesta = "";
+        ModeloVacuna vacuna;
+
         try {
-            if (cursor.moveToFirst()) {
+            if (cursor != null) {
+                cursor.moveToFirst();
                 do {
                     //Creo un objeto vacio para cargar los valores recuperados de la tabla
-                    ModeloVacuna vacuna = new ModeloVacuna();
-                    vacuna.setId_vacuna(cursor.getInt(cursor.getColumnIndex(PRIMARY_KEY_ID_VACUNA)));
-                    vacuna.setTipo_de_vacuna(cursor.getString(cursor.getColumnIndex(TIPO_DE_VACUNA)));
-                    vacuna.setFecha_de_vacuna(cursor.getString(cursor.getColumnIndex(FECHA_DE_VACUNA)));
-                    vacuna.setTipo_de_vacuna(cursor.getString(cursor.getColumnIndex(FIRMA)));
+                    /*ModeloVacuna vacuna = new ModeloVacuna();
+                    vacuna.setTipo_de_vacuna(cursor.getString(1));
+                    vacuna.setFecha_de_vacuna(cursor.getString(2));
+                    vacuna.setFirma(cursor.getString(3));
+                    vacuna.setMail(cursor.getString(4));/*
+
+                     */
+                    /*vacuna = new ModeloVacuna(cursor.getInt(cursor.getColumnIndexOrThrow(PRIMARY_KEY_ID_VACUNA)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(TIPO_DE_VACUNA)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(FECHA_DE_VACUNA)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(FIRMA)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(FK_KEY_MAIL))
+                    );*/
+                    /*vacuna.setTipo_de_vacuna(cursor.getString(cursor.getColumnIndexOrThrow(TIPO_DE_VACUNA)));
+                    vacuna.setFecha_de_vacuna(cursor.getString(cursor.getColumnIndexOrThrow(FECHA_DE_VACUNA)));
+                    vacuna.setFirma(cursor.getString(cursor.getColumnIndexOrThrow(FIRMA)));*/
+                    //vacunas.add(vacuna);
+
+                    vacuna = new ModeloVacuna();
+
+                    vacuna.setId_vacuna(cursor.getInt(0));
+                    respuesta = cursor.getString(1);
+                    vacuna.setTipo_de_vacuna(respuesta);
+                    respuesta = cursor.getString(2);
+                    vacuna.setFecha_de_vacuna(respuesta);
+                    respuesta = cursor.getString(3);
+                    vacuna.setFirma(respuesta);
+                    vacuna.setMail(email);
+
                     vacunas.add(vacuna);
 
                 } while(cursor.moveToNext());

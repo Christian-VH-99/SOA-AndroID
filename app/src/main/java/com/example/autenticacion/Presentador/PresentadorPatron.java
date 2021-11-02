@@ -21,7 +21,7 @@ public class PresentadorPatron {
 
     public void validarPatron (String patornIngresado){
         if(patron.equals(patornIngresado)){
-            Toast.makeText(contexto, "Patron correctro", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(contexto, "Patron correctro", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(contexto, VistaLogin.class);
             contexto.startActivity(intent);
         }else{

@@ -3,6 +3,9 @@
     package="com.example.autenticacion">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.hardware.sensor.gyroscope"/>
+    <uses-permission android:name="android.hardware.sensor.accelerometer" android:required="true"/>
+
 
     <application
         android:allowBackup="true"
