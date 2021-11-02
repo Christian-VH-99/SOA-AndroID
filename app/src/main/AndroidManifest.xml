@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Autenticacion"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Vista.VistaCargarVacuna"
+            android:exported="false" />
+        <activity
+            android:name=".Vista.VistaConsultarVacunas"
+            android:exported="false" />
+        <activity
             android:name=".Vista.VistaInicio"
             android:exported="false" />
         <activity

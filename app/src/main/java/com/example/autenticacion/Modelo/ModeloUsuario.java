@@ -17,11 +17,11 @@ public class ModeloUsuario {
         this.group = group;
     }
 
-    public ModeloUsuario(String email, String password){
+    /*public ModeloUsuario(String email, String password){
         this.env = "TEST";
         this.email = email;
         this.password = password;
-    }
+    }*/
 
     public String getEnv() {
         return env;

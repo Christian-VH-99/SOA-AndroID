@@ -5,28 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.autenticacion.API.ClienteApi;
 import com.example.autenticacion.Modelo.Evento.ModeloEvento;
 import com.example.autenticacion.Modelo.Evento.ModeloRespuestaEvento;
 import com.example.autenticacion.Modelo.Login.ModeloRespuestaLogin;
 import com.example.autenticacion.Modelo.Login.ModeloUsuarioLogin;
-import com.example.autenticacion.Modelo.ModeloUsuario;
-import com.example.autenticacion.Modelo.Token.ModeloTokens;
+import com.example.autenticacion.Modelo.Token.ModeloDatosSesion;
 import com.example.autenticacion.Vista.VistaInicio;
-import com.example.autenticacion.Vista.VistaLogin;
 import com.example.autenticacion.Vista.VistaRegistro;
-import com.google.type.DateTime;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,10 +63,10 @@ public class PresentadorLogin {
 
                         dialog.dismiss();
 
-                        ModeloTokens tokens = new ModeloTokens(response.body().getToken(),response.body().getToken_refresh());
+                        ModeloDatosSesion datosSesion = new ModeloDatosSesion(response.body().getToken(),response.body().getToken_refresh(), usuario.getEmail());
                         Intent intent = new Intent(contexto, VistaInicio.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("tokens", tokens);
+                        bundle.putSerializable("tokens", datosSesion);
                         intent.putExtras(bundle);
 
                         contexto.startActivity(intent);

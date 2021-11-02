@@ -2,12 +2,21 @@ package com.example.autenticacion.Modelo.Token;
 
 import java.io.Serializable;
 
-public class ModeloTokens implements Serializable {
-    private String token, token_Refresh;
+public class ModeloDatosSesion implements Serializable {
+    private String token, token_Refresh, email;
 
-    public ModeloTokens(String token, String token_Refresh) {
+    public ModeloDatosSesion(String token, String token_Refresh, String email) {
         this.token = token;
         this.token_Refresh = token_Refresh;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getToken() {
