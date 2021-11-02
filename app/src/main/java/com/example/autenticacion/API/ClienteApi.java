@@ -54,6 +54,7 @@ public class ClienteApi {
 
     public void Refresh(String token_refresh, Callback<ModeloRespuestaToken> callback)
     {
+
         Call<ModeloRespuestaToken> usuarioCall = servicio.refresh("Bearer "+token_refresh);
         usuarioCall.enqueue(callback);
     }
