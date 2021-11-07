@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
@@ -25,22 +28,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PresentadorInicio {
+public class PresentadorInicio implements SensorEventListener {
 
     private Context contexto;
     private ModeloDatosSesion datosSesion;
     private Handler handler = new Handler();
     private final int TIEMPO = 870000;
     private ClienteApi clienteApi;
-    private String email;
+    private SensorManager sensorManager;
 
-    public ModeloDatosSesion getDatosSesion() {
-        return datosSesion;
-    }
-
-    public void setDatosSesion(ModeloDatosSesion datosSesion) {
-        this.datosSesion = datosSesion;
-    }
 
     public PresentadorInicio(Context contexto, Bundle datosDeSesion)
     {
@@ -48,6 +44,9 @@ public class PresentadorInicio {
         if(datosDeSesion!=null){
             this.datosSesion = (ModeloDatosSesion) datosDeSesion.getSerializable("tokens");
         }
+
+        sensorManager = (SensorManager) contexto.getSystemService(Context.SENSOR_SERVICE);
+
         clienteApi = ClienteApi.getInstance();
         actualizarToken();
 
@@ -76,8 +75,7 @@ public class PresentadorInicio {
         },TIEMPO);
     }
 
-    public void obtenerNuevoToken()
-    {
+    public void obtenerNuevoToken() {
 
         if(!confirmarConexion()){
             Toast.makeText(contexto, "Error en la conexion", Toast.LENGTH_SHORT).show();
@@ -177,5 +175,48 @@ public class PresentadorInicio {
                 Toast.makeText(contexto, "Falla al registrar un evento Temperatura", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public ModeloDatosSesion getDatosSesion() {
+        return datosSesion;
+    }
+
+    public void setDatosSesion(ModeloDatosSesion datosSesion) {
+        this.datosSesion = datosSesion;
+    }
+
+
+    // sensores
+    public void inicializarSensores(){
+        sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    public void pararSensores(){
+        sensorManager.unregisterListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
+        sensorManager.unregisterListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE));
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        //como los sensores pueden lanzar un hilo que pasa por aca me sincronizo
+        synchronized (this){
+            if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+                if((event.values[0]>25) || (event.values[1]>25) || (event.values[2]>25) ){
+                    registrarShake();
+                    consultarVacunas();
+                }
+            }else if(event.sensor.getType()== Sensor.TYPE_AMBIENT_TEMPERATURE){
+                if(event.values[0] > 35){
+                    registrarTempAlta();
+                    avisoTemp(event.values[0]);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

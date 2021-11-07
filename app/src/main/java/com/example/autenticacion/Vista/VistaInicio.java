@@ -18,14 +18,10 @@ import com.example.autenticacion.Modelo.Login.ModeloRespuestaLogin;
 import com.example.autenticacion.Presentador.PresentadorInicio;
 import com.example.autenticacion.R;
 
-public class VistaInicio extends AppCompatActivity implements View.OnClickListener, SensorEventListener{
+public class VistaInicio extends AppCompatActivity implements View.OnClickListener{
 
     private PresentadorInicio presntdorInicio;
     private SensorManager sensorManager;
-    //private Sensor acelerometro;
-
-
-    int whip = 0;
 
 
     @Override
@@ -38,7 +34,7 @@ public class VistaInicio extends AppCompatActivity implements View.OnClickListen
         presntdorInicio = new PresentadorInicio(this,datosDeSesion);
         presntdorInicio.mostrarNivelBateria();
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         TextView tvUsuario = findViewById(R.id.textViewUusario);
         tvUsuario.setText(presntdorInicio.getDatosSesion().getEmail());
@@ -67,7 +63,7 @@ public class VistaInicio extends AppCompatActivity implements View.OnClickListen
             presntdorInicio.consultarVacunas();
         }
     }
-
+/*
     protected void inicializarSensores(){
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_NORMAL);
@@ -77,31 +73,32 @@ public class VistaInicio extends AppCompatActivity implements View.OnClickListen
         sensorManager.unregisterListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
         sensorManager.unregisterListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE));
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();
-        inicializarSensores();
+        presntdorInicio.inicializarSensores();
     }
 
     @Override
     protected void onRestart() {
-        inicializarSensores();
+        presntdorInicio.inicializarSensores();
         super.onRestart();
     }
 
     @Override
     protected void onStop() {
-        pararSensores();
+        presntdorInicio.pararSensores();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        pararSensores();
+        presntdorInicio.pararSensores();
         super.onDestroy();
     }
 
+    /*
     @Override
     public void onSensorChanged(SensorEvent event) {
         //como los sensores pueden lanzar un hilo que pasa por aca me sincronizo
@@ -123,5 +120,5 @@ public class VistaInicio extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+    }*/
 }
