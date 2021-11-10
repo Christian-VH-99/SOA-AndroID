@@ -99,6 +99,9 @@ public class PresentadorCargarVacuna {
             if(BaseDeDatos.insertarVacuna(vacuna)){
                 Toast.makeText(contexto, "Se cargo la vacuna correctamente", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(contexto, VistaInicio.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("tokens", datosSesion);
+                intent.putExtras(bundle);
                 contexto.startActivity(intent);
             }
         }

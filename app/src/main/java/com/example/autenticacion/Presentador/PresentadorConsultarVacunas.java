@@ -94,13 +94,16 @@ public class PresentadorConsultarVacunas {
     }
 
     public void consultarVacunas() {
-        AdminSQLiteOpenHelper BaseDeDatos = new AdminSQLiteOpenHelper(contexto);
+        AdminSQLiteOpenHelper BaseDeDatos = AdminSQLiteOpenHelper.getInstance(contexto);
         this.vacunas = BaseDeDatos.consultarVacunas(this.datosSesion.getEmail());
     }
 
     public void volver() {
 
         Intent intent = new Intent(contexto, VistaInicio.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("tokens", datosSesion);
+        intent.putExtras(bundle);
         contexto.startActivity(intent);
     }
 
