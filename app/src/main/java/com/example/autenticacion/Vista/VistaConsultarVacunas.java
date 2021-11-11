@@ -38,7 +38,7 @@ public class VistaConsultarVacunas extends AppCompatActivity implements View.OnC
 
         listView = findViewById(R.id.list_vacunas);
 
-        if(!vacunas.isEmpty()){
+        if(vacunas!=null && (!vacunas.isEmpty())){
             adaptador = new ListAdapter(this,R.layout.item_row,vacunas);
             listView.setAdapter(adaptador);
         }else
